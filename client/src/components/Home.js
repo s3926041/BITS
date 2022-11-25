@@ -1,36 +1,26 @@
 import React, { useEffect, useState } from "react";
-import {
-  MDBCard,
-  MDBCardBody,
-  MDBCardTitle,
-  MDBCardText,
-  MDBBtn,MDBCardImage
-} from 'mdb-react-ui-kit';
+
 
 import axios from "axios";
 
+import BookDisplay from "./BookDisplay";
 
-function Home({data}) {
+function Home() {
+  let apiLink = "https://api.itbook.store/1.0/new";
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const req = await axios.get(apiLink);
+
+      setData(req.data.books);
+
+      return req;
+    }
+    fetchData();
+  }, []);
   return (
-    <div className="">      
-    {data.map((item) => (
-      // item.volumeInfo.imageLinks.smallThumbnail
-      // item.volumeInfo.title
-      // item.volumeInfo.authors
-      <MDBCard>
-      {/* <MDBCardImage src={item.volumeInfo.imageLinks.thumbnail} className='' position='top' alt='' /> */}
-      <MDBCardBody>
-        <MDBCardTitle>{item.volumeInfo.title}</MDBCardTitle>
-        <MDBCardText>
-         {item.volumeInfo.authors}
-        </MDBCardText>
-        <MDBBtn href='#'>Button</MDBBtn>
-      </MDBCardBody>
-    </MDBCard>
-    ))} </div>
-
- 
-  
+    <BookDisplay data={data}></BookDisplay>
   );
 }
 
