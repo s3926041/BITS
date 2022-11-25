@@ -6,8 +6,8 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import {useState} from "react"
 
-function Navi() {
-  const [cartItem,setcartItem] = useState()
+function Navi({cart,setCart}) {
+
   const [search,setSearch] = useState("")
   return (
     <Navbar bg="light" fixed="top" expand="lg">
@@ -52,7 +52,7 @@ function Navi() {
           </Form>
           <Nav>
             <Nav.Link href="/auth">Auth</Nav.Link>
-            <Nav.Link href="/cart">Cart</Nav.Link>
+            <Nav.Link href="/cart">Cart {`${cart}`}</Nav.Link>
             {/* <Nav.Link href="#link">Link</Nav.Link> */}
           </Nav>
         </Navbar.Collapse>

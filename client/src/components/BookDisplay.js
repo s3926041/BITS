@@ -9,7 +9,7 @@ import {
   MDBCardImage,
 } from "mdb-react-ui-kit";
 
-export default function BookDisplay({data}) {
+export default function BookDisplay({data,cart,setCart}) {
   return (
     <div className="">
     {data.map((item, i) => {
@@ -47,7 +47,7 @@ export default function BookDisplay({data}) {
                   'price' : item.price
                 }
               }
-                console.log(arr)
+              setCart(cart+1)
               localStorage.setItem('group100_cart',JSON.stringify(arr))
             }
             }>Add to cart</Button>

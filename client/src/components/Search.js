@@ -5,7 +5,7 @@ import axios from "axios";
 import BookDisplay from "./BookDisplay";
 import Pagnition from "./Pagnition";
 
-export default function Search() {
+export default function Search({cart,setCart}) {
   const { search, page } = useParams();
   const [data, setData] = useState([]);
   const [totalPage, setTotalPage] = useState(1);
@@ -31,7 +31,7 @@ export default function Search() {
   console.log(apiLink);
   return (
     <div className="">
-     <BookDisplay data={data}></BookDisplay>
+     <BookDisplay data={data} cart={cart} setCart={setCart}></BookDisplay>
     <Pagnition para1={"search"} para2={search} t={t} page={page}></Pagnition>
     </div>
   );

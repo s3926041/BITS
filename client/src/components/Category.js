@@ -4,7 +4,7 @@ import axios from "axios";
 import BookDisplay from "./BookDisplay";
 import Pagnition from "./Pagnition";
 
-export default function Category() {
+export default function Category({cart,setCart}) {
   const { category, page } = useParams();
   const [data, setData] = useState([]);
   const [totalPage, setTotalPage] = useState(1);
@@ -30,7 +30,7 @@ export default function Category() {
   console.log(apiLink);
   return (
     <div className="">
-      <BookDisplay data={data}></BookDisplay>
+      <BookDisplay data={data} cart={cart} setCart={setCart}></BookDisplay>
       <Pagnition
         para1={"category"}
         para2={category}

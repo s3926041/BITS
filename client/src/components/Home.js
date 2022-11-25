@@ -5,7 +5,7 @@ import axios from "axios";
 
 import BookDisplay from "./BookDisplay";
 
-function Home() {
+function Home({cart,setCart}) {
   let apiLink = "https://api.itbook.store/1.0/new";
   const [data, setData] = useState([]);
 
@@ -20,7 +20,7 @@ function Home() {
     fetchData();
   }, []);
   return (
-    <BookDisplay data={data}></BookDisplay>
+    <BookDisplay data={data} cart={cart} setCart={setCart}></BookDisplay>
   );
 }
 

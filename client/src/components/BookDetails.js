@@ -2,7 +2,7 @@ import React, { useEffect,useState } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 
-export default function BookDetails() {
+export default function BookDetails({cart,setCart}) {
     const [data,setData] = useState({})
     let {id} = useParams()
     let apiLink = `https://api.itbook.store/1.0/books/${id}`;
