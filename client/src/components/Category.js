@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import {
-  MDBCard,
-  MDBCardBody,
-  MDBCardTitle,
-  MDBCardText,
-  MDBBtn,
-  MDBCardImage,
-} from "mdb-react-ui-kit";
 import BookDisplay from "./BookDisplay";
 import Pagnition from "./Pagnition";
 
@@ -25,7 +17,6 @@ export default function Category() {
       const req = await axios.get(apiLink);
       if (!check) {
         setTotalPage(Math.ceil(parseFloat(req.data.total) / 10));
-
         check = false;
       }
       setData(req.data.books);
@@ -40,7 +31,12 @@ export default function Category() {
   return (
     <div className="">
       <BookDisplay data={data}></BookDisplay>
-      <Pagnition para1={"category"} para2={category} t={t} page={page}></Pagnition>
+      <Pagnition
+        para1={"category"}
+        para2={category}
+        t={t}
+        page={page}
+      ></Pagnition>
     </div>
   );
 }

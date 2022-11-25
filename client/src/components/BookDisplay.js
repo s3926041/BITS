@@ -28,7 +28,29 @@ export default function BookDisplay({data}) {
           <MDBCardBody>
             <MDBCardTitle>{item.title}</MDBCardTitle>
             <MDBCardText>{price}</MDBCardText>
-         
+            <Button onClick={
+              ()=>{
+              if (localStorage.getItem("group100_cart") === null) {
+                localStorage.setItem('group100_cart',JSON.stringify({}))
+              }
+              let arr = JSON.parse(localStorage.getItem('group100_cart'))
+              let id = item.isbn13
+              console.log(id)
+              if (id in arr){
+                arr[id].quantity += 1
+              }
+              else {
+                arr[id] ={
+                  'quantity' : 1,
+                  'image' : item.image,
+                  'title' : item.title,
+                  'price' : item.price
+                }
+              }
+                console.log(arr)
+              localStorage.setItem('group100_cart',JSON.stringify(arr))
+            }
+            }>Add to cart</Button>
           </MDBCardBody>
         </MDBCard>
       );

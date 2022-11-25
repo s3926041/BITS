@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import {
-  MDBCard,
-  MDBCardBody,
-  MDBCardTitle,
-  MDBCardText,
-  MDBBtn,
-  MDBCardImage,
-} from "mdb-react-ui-kit";
+
 import BookDisplay from "./BookDisplay";
 import Pagnition from "./Pagnition";
 
@@ -31,7 +24,6 @@ export default function Search() {
       console.log(apiLink);
       return req;
     }
-
     fetchData();
   }, []);
   t = totalPage;

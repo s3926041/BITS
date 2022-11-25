@@ -7,6 +7,7 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import {useState} from "react"
 
 function Navi() {
+  const [cartItem,setcartItem] = useState()
   const [search,setSearch] = useState("")
   return (
     <Navbar bg="light" fixed="top" expand="lg">
@@ -15,9 +16,9 @@ function Navi() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="#">Link</Nav.Link>
+            {/* <Nav.Link href="#">Link</Nav.Link>
             <Nav.Link href="#home">Link</Nav.Link>
-            <Nav.Link href="#link">Link</Nav.Link>
+            <Nav.Link href="#link">Link</Nav.Link> */}
             <NavDropdown title="Category" id="basic-nav-dropdown">
               <NavDropdown.Item 
               href="/category/education/1"
@@ -30,10 +31,10 @@ function Navi() {
                  Technology
               </NavDropdown.Item>
               <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-              <NavDropdown.Divider />
+              {/* <NavDropdown.Divider />
               <NavDropdown.Item href="#action/3.4">
                 Separated link
-              </NavDropdown.Item>
+              </NavDropdown.Item> */}
             </NavDropdown>
           </Nav>
           <Form className="d-flex">
@@ -51,8 +52,8 @@ function Navi() {
           </Form>
           <Nav>
             <Nav.Link href="/auth">Auth</Nav.Link>
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#link">Link</Nav.Link>
+            <Nav.Link href="/cart">Cart</Nav.Link>
+            {/* <Nav.Link href="#link">Link</Nav.Link> */}
           </Nav>
         </Navbar.Collapse>
       </Container>
