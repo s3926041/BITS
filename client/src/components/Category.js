@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import BookDisplay from "./BookDisplay";
 import Pagnition from "./Pagnition";
+import { AuthContext } from "../helpers/AuthContext";
 
-export default function Category({cart,setCart}) {
+export default function Category() {
   const { category, page } = useParams();
   const [data, setData] = useState([]);
   const [totalPage, setTotalPage] = useState(1);
+  const {userGlobal,cartGlobal} = useContext(AuthContext)
+  const { cart, setCart } = cartGlobal
   let t = totalPage;
   let apiLink =
     "https://api.itbook.store/1.0/search/" + `${category}` + "/" + `${page}`;

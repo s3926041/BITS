@@ -1,22 +1,36 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import mongoose from 'mongoose';
-import cors from 'cors';
-
-import postRoutes from './routes/posts.js';
-
+const express = require("express");
 const app = express();
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+dotenv.config();
+// const userRoute = require("./routes/user");
+const authRoute = require("./routes/auth");
+const productRoute = require("./routes/product");
+// const cartRoute = require("./routes/cart");
+const orderRoute = require("./routes/order");
+// const stripeRoute = require("./routes/stripe");
+const cors = require("cors");
 
-app.use(bodyParser.json({ limit: '30mb', extended: true }))
-app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }))
+
+mongoose
+.connect(process.env.MONGO_URL)
+  .then(() => console.log("DB Connection Successfull!"))
+  .catch((err) => {
+    console.log(err);
+  });
+
 app.use(cors());
-app.use('/posts',postRoutes)
-// app.use('/posts', postRoutes);
-const CONNECTION_URL = 'mongodb+srv://hungnguyen:hungnguyen12@cluster0.zz2j8ri.mongodb.net/?retryWrites=true&w=majority'
-const PORT = process.env.PORT|| 5000;
+app.use(express.json());
 
-mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => app.listen(PORT, () => console.log(`Server Running on Port: http://localhost:${PORT}`)))
-  .catch((error) => console.log(`${error} did not connect`));
+app.use('/api/order',orderRoute)
+app.use("/api/auth", authRoute);
+app.use("/api/product",productRoute)
+// app.use("/api/users", userRoute);
+// app.use("/api/products", productRoute);
+// app.use("/api/carts", cartRoute);
+// app.use("/api/orders", orderRoute);
+// app.use("/api/checkout", stripeRoute);
 
-// mongoose.set('useFindAndModify', false);
+app.listen(process.env.PORT , () => {
+  console.log("Backend server is running!");
+});
