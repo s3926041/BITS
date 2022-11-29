@@ -8,14 +8,14 @@ router.post("/place", verifyToken, async (req, res) => {
   let arr = [];
   let price = 0;
   Object.keys(obj).map((item, i) => {
-    arr.push(
-        { 
-        productId: item, 
-        quantity: obj[item].quantity 
+    arr.push({
+      productId: item,
+      quantity: obj[item].quantity,
     });
-    price += parseFloat(obj[item].price)
+    price += parseFloat(obj[item].price);
   });
-  if(arr == [] || price == 0) return res.status(500).json({err:'no order receive'})
+  if (arr == [] || price == 0)
+    return res.status(500).json({ err: "NO OR DER RECEIVE" });
   const order = new Order({
     userId: req.user.id,
     products: arr,
@@ -28,5 +28,22 @@ router.post("/place", verifyToken, async (req, res) => {
     res.status(500).json(err);
   }
 });
+router.get("/general", verifyToken, async (req, res) => {
+  const orders = await Order.find({ userId: req.user.id });
+  return res.json(orders);
+});
+
+router.get("/details/:orderId", verifyToken, async (req, res) => {
+  const order = await Order.findById(req.params.orderId);
+  res.status(200).json(order)
+});
+
+
+
+router.get('/all',verifyTokenAndAdmin, async (req,res)=>{
+  const all = await Order.find();
+  res.status(200).json(all)
+})
+
 
 module.exports = router;

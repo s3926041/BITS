@@ -8,13 +8,13 @@ router.get("/", async (req, res) => {
   res.status(200).json(listOfProduct);
 });
 router.post("/import", async (req, res) => {
-  try{
-    await Product.insertMany(req.body,{ordered:true})
-    res.status(200).json(req.body)
-    }
-  catch(err){
-    res.status(500).json(err)
-}});
+  try {
+    await Product.insertMany(req.body, { ordered: true });
+    res.status(200).json(req.body);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 router.get("/find/:id", async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
@@ -42,4 +42,3 @@ router.post("/create", verifyTokenAndAdmin, async (req, res) => {
 });
 
 module.exports = router;
-

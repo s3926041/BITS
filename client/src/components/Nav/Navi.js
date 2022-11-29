@@ -5,7 +5,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { useState, useContext } from "react";
-import { AuthContext } from "../helpers/AuthContext";
+import { AuthContext } from "../../helpers/AuthContext";
 
 function Navi() {
   const [search, setSearch] = useState("");
@@ -52,10 +52,12 @@ function Navi() {
             {authState.status && (
               <>
                 <NavDropdown title={authState.username} id="basic-nav-dropdown">
-                  <NavDropdown.Item href={`user/${id}`}>
+                  <NavDropdown.Item href={`/user/profile`}>
                     Profile
                   </NavDropdown.Item>
-                  <NavDropdown.Item href={`user/${id}/order`}>Orders</NavDropdown.Item>
+                  <NavDropdown.Item href={`/user/order/general`}>
+                    Orders
+                  </NavDropdown.Item>
                   <NavDropdown.Divider />
                   <NavDropdown.Item
                     href="/home"

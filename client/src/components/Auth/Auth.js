@@ -2,16 +2,15 @@ import React, { useState, useContext } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { AuthContext } from "../helpers/AuthContext";
+import { AuthContext } from "../../helpers/AuthContext";
 
 export default function () {
   let [authMode, setAuthMode] = useState("signin");
-  const {userGlobal} = useContext(AuthContext)
-  const { authState,setAuthState } = userGlobal
+  const { userGlobal } = useContext(AuthContext);
+  const { authState, setAuthState } = userGlobal;
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
-    navigate("/home");
     event.preventDefault();
     let url = "http://localhost:5000/api/auth/login";
     let data = {
@@ -29,6 +28,7 @@ export default function () {
       await axios
         .post(url, data)
         .then((res) => {
+          alert('success')
           if (authMode == "signin") {
             localStorage.setItem("token", res.data.token);
             setAuthState({
@@ -37,8 +37,8 @@ export default function () {
               status: true,
             });
             navigate("/home");
-          }else{
-            navigate("/auth");
+          } else {
+            setAuthMode("signin")
           }
         })
         .catch((err) => {
@@ -51,8 +51,8 @@ export default function () {
   const changeAuthMode = () => {
     setAuthMode(authMode === "signin" ? "signup" : "signin");
   };
-  if(authState.status){
-    return <Navigate to='/home'></Navigate>
+  if (authState.status) {
+    return <Navigate to="/home"></Navigate>;
   }
 
   if (authMode === "signin") {

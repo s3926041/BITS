@@ -19,14 +19,15 @@ export default function Cart() {
       .then((res) => {
         console.log(res.data);
         localStorage.removeItem("group100_cart");
-        navigate('/cart')
+        navigate('/success/:orderId')
       })
       .catch((err) => {
-        console.log(err.response);
+        alert(err.message)
       });
   };
   const handleClick = () => {
-    post();
+    if(localStorage.getItem('group100_cart') !== null)
+      post();
   };
   return (
     <div>

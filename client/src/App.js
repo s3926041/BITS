@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
-import Navi from "./components/Navi";
+import Navi from "./components/Nav/Navi";
 import Home from "./components/Home";
-import BookDetails from "./components/BookDetails";
-import Auth from "./components/Auth";
-import Category from "./components/Category";
-import Cart from "./components/Cart";
+import BookDetails from "./components/Book/BookDetails";
+import Auth from "./components/Auth/Auth";
+import Cart from "./components/Cart/Cart";
 import { AuthContext } from "./helpers/AuthContext";
 import axios from "axios";
-import Profile from "./components/Profile";
+import Profile from "./components/User/Profile";
+import General from "./components/User/General";
+import Details from "./components/User/Details";
 const App = () => {
   const [cart, setCart] = useState(0);
   const [authState, setAuthState] = useState({
@@ -45,41 +46,30 @@ const App = () => {
             id: response.data.id,
             status: true,
           });
-          console.log(response.data.username)
-          console.log("success full authenticate");
+          console.log("LOGGED IN AS " + response.data.username);
         }
-      });
+      }).catch((err)=>{});
   }, []);
 
 
-  const changeCart = (value) => {
-    setCart(value);
-  };
   return (
-    <AuthContext.Provider value={{userGlobal:{ authState, setAuthState },cartGlobal:{cart, setCart}}}>
+    <AuthContext.Provider
+      value={{
+        userGlobal: { authState, setAuthState },
+        cartGlobal: { cart, setCart },
+      }}
+    >
       <BrowserRouter>
         <Navi />
         <Routes>
-          <Route
-            path="/"
-            element={<Navigate to="/home" />}
-          />
-          <Route
-            path="/home"
-            element={<Home />}
-          ></Route>
+          <Route path="/" element={<Navigate to="/home" />} />
+          <Route path="/home" element={<Home />}></Route>
           <Route path="/auth" element={<Auth />}></Route>
-          <Route
-            path="/book/:id"
-            element={
-              <BookDetails></BookDetails>
-            }
-          ></Route>
-          <Route
-            path="/cart"
-            element={<Cart></Cart>}
-          ></Route>
-          <Route path="/user/:id" element={<Profile></Profile>}></Route>
+          <Route path="/book/:id" element={<BookDetails></BookDetails>}></Route>
+          <Route path="/cart" element={<Cart></Cart>}></Route>
+          <Route path="/user/profile" element={<Profile></Profile>}></Route>         
+          <Route path="/user/order/general" element={<General></General>}></Route>         
+          <Route path="/user/order/details/:orderId" element={<Details></Details>}></Route>         
         </Routes>
       </BrowserRouter>
     </AuthContext.Provider>
