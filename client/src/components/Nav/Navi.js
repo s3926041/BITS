@@ -15,7 +15,7 @@ function Navi() {
   let id = authState.id;
 
   return (
-    <Navbar bg="light" expand="lg">
+    <Navbar expand="lg">
       <Container>
         <Navbar.Brand href="/home">Group 100</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />

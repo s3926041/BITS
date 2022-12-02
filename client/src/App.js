@@ -10,8 +10,12 @@ import axios from "axios";
 import Profile from "./components/User/Profile";
 import General from "./components/User/General";
 import Details from "./components/User/Details";
+import Banner from "./components/Banner";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 const App = () => {
   const [cart, setCart] = useState(0);
+  const [page, setPage] = useState("Home");
   const [authState, setAuthState] = useState({
     username: "",
     id: 0,
@@ -48,29 +52,49 @@ const App = () => {
           });
           console.log("LOGGED IN AS " + response.data.username);
         }
-      }).catch((err)=>{});
+      })
+      .catch((err) => {});
   }, []);
-
 
   return (
     <AuthContext.Provider
       value={{
         userGlobal: { authState, setAuthState },
         cartGlobal: { cart, setCart },
+        pageGlobal: { page, setPage },
       }}
     >
       <BrowserRouter>
         <Navi />
+        <Banner />
         <Routes>
           <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/home" element={<Home />}></Route>
           <Route path="/auth" element={<Auth />}></Route>
           <Route path="/book/:id" element={<BookDetails></BookDetails>}></Route>
           <Route path="/cart" element={<Cart></Cart>}></Route>
-          <Route path="/user/profile" element={<Profile></Profile>}></Route>         
-          <Route path="/user/order/general" element={<General></General>}></Route>         
-          <Route path="/user/order/details/:orderId" element={<Details></Details>}></Route>         
+          <Route path="/user/profile" element={<Profile></Profile>}></Route>
+          <Route
+            path="/user/order/general"
+            element={<General></General>}
+          ></Route>
+          <Route
+            path="/user/order/details/:orderId"
+            element={<Details></Details>}
+          ></Route>
         </Routes>
+        <ToastContainer
+          position="top-left"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
       </BrowserRouter>
     </AuthContext.Provider>
   );

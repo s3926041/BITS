@@ -27,15 +27,18 @@ const App = () => {
       })
       .catch((err) => {
         console.log(err.message);
+        setAuthState(false)
       });
   }, []);
 
   return (
     <AuthContext.Provider value={{ authState, setAuthState }}>
       <BrowserRouter>
-        {authState && <Aside></Aside>}
+      <div className="d-flex">
+      {authState && <Aside></Aside>}
+      
         <Routes>
-          {/* <Route
+          <Route
             path="/"
             element={
               authState ? (
@@ -44,13 +47,15 @@ const App = () => {
                 <Navigate to="/login" />
               )
             }
-          /> */}
+          />
           <Route path="/login" element={<Auth />}></Route>
           <Route path="/dashboard" element={<DashBoard />}></Route>
           <Route path="/order" element={<Order />}></Route>
           <Route path="/product" element={<Product />}></Route>
           <Route path="/user" element={<User />}></Route>
         </Routes>
+      </div>
+        
       </BrowserRouter>
     </AuthContext.Provider>
   );

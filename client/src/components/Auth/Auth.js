@@ -66,7 +66,7 @@ export default function () {
               <label>Username</label>
               <input
                 type="text"
-                className="form-control mt-1"
+                className="form-control mt-1 no_border"
                 placeholder="Username"
               />
             </div>
@@ -74,12 +74,12 @@ export default function () {
               <label>Password</label>
               <input
                 type="password"
-                className="form-control mt-1"
+                className="form-control mt-1 no_border"
                 placeholder="Enter password"
               />
             </div>
             <div className="d-grid gap-2 mt-3">
-              <button type="submit" className="btn btn-primary">
+              <button type="submit" className="btn btn-primary no_border">
                 Submit
               </button>
             </div>
