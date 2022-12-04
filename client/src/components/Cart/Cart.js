@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../helpers/AuthContext";
+import 'bootstrap/dist/css/bootstrap.min.css';
 export default function Cart() {
-  const { pageGlobal } = useContext(AuthContext);
+  const { cartGlobal,pageGlobal } = useContext(AuthContext);
   // pageGlobal.setPage("Cart");
   const navigate = useNavigate();
   let quantity = 0;
@@ -32,11 +33,21 @@ export default function Cart() {
       )
       .then((res) => {
         localStorage.removeItem("group100_cart");
-        navigate("/success/:orderId");
+        cartGlobal.setCart(0)
+        toast.success(`🦄 Order has been placed!`, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
       })
       .catch((err) => {
         toast.error(`🦄 You need to login first!`, {
-          position: "top-left",
+          position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
@@ -53,7 +64,7 @@ export default function Cart() {
     }
     else{
       toast.error(`🦄 Cart is empty!`, {
-        position: "top-left",
+        position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -77,8 +88,7 @@ export default function Cart() {
                     <div className="row">
                       <div className="col-lg-7">
                         <h5 className="mb-3">
-                          <a href="#!" className="text-body">
-                            <i className="fas fa-long-arrow-alt-left me-2" />
+                          <a href="/books" className="text-body">
                             Continue shopping
                           </a>
                         </h5>
@@ -90,22 +100,15 @@ export default function Cart() {
                               You have {quantity} items in your cart
                             </p>
                           </div>
-                          <div>
-                            <p className="mb-0">
-                              <span className="text-muted">Sort by:</span>{" "}
-                              <a href="#!" className="text-body">
-                                price <i className="fas fa-angle-down mt-1" />
-                              </a>
-                            </p>
-                          </div>
+                 
                         </div>
 
                         {cart !== null && Object.keys(cart).map((key) => {
                           let item = cart[key];
                           return (
-                            <div className="card mb-3 mb-lg-0 no_border">
+                            <div className="card my-3 mb-lg-0 no_border">
                               <div className="card-body">
-                                <div className="d-flex justify-content-between">
+                                <div className="d-md-flex justify-content-between">
                                   <div className="d-flex flex-row align-items-center">
                                     <div>
                                       <img
@@ -116,9 +119,9 @@ export default function Cart() {
                                       />
                                     </div>
                                     <div className="ms-3">
-                                      <h5>MacBook Pro</h5>
+                                      <span className="small limit_txt fw-bold" style={{ width: "150px"}}>{item.title}</span>
                                       <p className="small mb-0">
-                                      {item.author}
+                                      By {item.author}
                                       </p>
                                     </div>
                                   </div>
@@ -140,7 +143,7 @@ export default function Cart() {
                         })}
                       </div>
                       <div className="col-lg-5">
-                        <div className="card bg-primary text-white no_border">
+                        <div className="card bgF1F6F7  no_border">
                           <div className="card-body">
                             <div className="d-flex justify-content-between align-items-center mb-4">
                               <h5 className="mb-0">Billing Details</h5>
@@ -156,13 +159,7 @@ export default function Cart() {
                                   size={17}
                                   placeholder="Full Name"
                                 />
-                                <label
-                                  className="form-label"
-                                  htmlFor="typeName"
-                                  style={{ marginLeft: "0px" }}
-                                >
-                                Full Name
-                                </label>
+                 
                                 <div className="form-notch">
                                   <div
                                     className="form-notch-leading"
@@ -183,13 +180,6 @@ export default function Cart() {
                                   size={17}
                                   placeholder="Address"
                                 />
-                                <label
-                                  className="form-label"
-                                  htmlFor="1"
-                                  style={{ marginLeft: "0px" }}
-                                >
-                                  Address
-                                </label>
                                 <div className="form-notch">
                                   <div
                                     className="form-notch-leading"
@@ -220,7 +210,7 @@ export default function Cart() {
                             </div>
                             <button
                               type="button"
-                              className="btn btn-info btn-block btn-lg no_border"
+                              className="btn bgfff border btn-block btn-lg no_border"
                             >
                               <div
                                 className="d-flex justify-content-between"

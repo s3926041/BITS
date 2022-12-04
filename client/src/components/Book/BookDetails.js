@@ -4,8 +4,8 @@ import axios from 'axios'
 
 export default function BookDetails() {
     const [data,setData] = useState({})
-    let {id} = useParams()
-    let apiLink = `https://api.itbook.store/1.0/books/${id}`;
+    let { id } = useParams()
+    let apiLink = ``;
     useEffect(() => {
         async function fetchData() {
             const req = await axios.get(apiLink);
