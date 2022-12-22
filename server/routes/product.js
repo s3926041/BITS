@@ -18,6 +18,7 @@ router.post("/import", async (req, res) => {
 });
 router.get("/find/:id", async (req, res) => {
   try {
+    // console.log(req.params.id)
     const product = await Product.findById(req.params.id);
     res.status(200).json(product);
   } catch (err) {

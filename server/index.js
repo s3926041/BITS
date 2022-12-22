@@ -6,14 +6,18 @@ dotenv.config();
 const userRoute = require("./routes/user");
 const authRoute = require("./routes/auth");
 const productRoute = require("./routes/product");
+const newsRoute = require("./routes/news");
 // const cartRoute = require("./routes/cart");
 const orderRoute = require("./routes/order");
+const blogRoute = require("./routes/blog");
+const conversationRoute = require("./routes/conversations");
+const messageRoute = require("./routes/messages");
+
 // const stripeRoute = require("./routes/stripe");
 const cors = require("cors");
 
-
 mongoose
-.connect(process.env.MONGO_URL)
+  .connect(process.env.MONGO_URL)
   .then(() => console.log("DB Connection Successfull!"))
   .catch((err) => {
     console.log(err);
@@ -21,17 +25,15 @@ mongoose
 
 app.use(cors());
 app.use(express.json());
-
-app.use('/api/order',orderRoute)
+app.use("/api/order", orderRoute);
 app.use("/api/auth", authRoute);
-app.use("/api/product",productRoute)
-app.use("/api/user",userRoute)
-// app.use("/api/users", userRoute);
-// app.use("/api/products", productRoute);
-// app.use("/api/carts", cartRoute);
-// app.use("/api/orders", orderRoute);
-// app.use("/api/checkout", stripeRoute);
+app.use("/api/product", productRoute);
+app.use("/api/user", userRoute);
+app.use("/api/news", newsRoute);
+app.use("/api/blog", blogRoute);
+app.use("/api/conversations", conversationRoute);
+app.use("/api/messages", messageRoute);
 
-app.listen(process.env.PORT , () => {
+app.listen(process.env.PORT, () => {
   console.log("Backend server is running!");
 });

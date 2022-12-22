@@ -13,11 +13,12 @@ a{
   cursor: pointer;
 }
 .Auth-form-container {
+  margin: 50px 0;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100vw;
-  height: 500px;
+  max-height: 800px;
 }
 
 .Auth-form {
@@ -66,7 +67,7 @@ label {
   color:#2375F3
 }
 .sort{
-  width: 200px;
+  width: 150px;
 }
 /* CSS */
 .button-9 {
@@ -109,4 +110,9 @@ label {
 }
 .bgfff{
   background: #fff;
+}
+
+fieldset{
+
+  outline: none !important;
 }

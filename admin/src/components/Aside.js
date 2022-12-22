@@ -7,6 +7,7 @@ export default function () {
       <a href="/order">Order</a>
       <a href="/product">Product</a>
       <a href="/user">User</a>
+      <a href="/chat">Chat</a>
     </div>
   );
 }

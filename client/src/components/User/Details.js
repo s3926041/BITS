@@ -1,12 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useNavigate ,Navigate} from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../helpers/AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function Details() {
+  const { userGlobal } = useContext(AuthContext);
+  const { authState, setAuthState } = userGlobal;
   const [data, setData] = useState([]);
   const { orderId } = useParams();
 
@@ -18,9 +20,8 @@ export default function Details() {
         },
       })
       .then((res) => {
-        setData(res.data);
-        products = data.products
-        console.log(res.data)
+        setData(res.data.products);
+        console.log(res.data.products)
       })
       .catch((err) => {
         console.log(err);
@@ -29,7 +30,9 @@ export default function Details() {
   useEffect(() => {
     apiCall();
   }, []);
-  let products = []
+  if (!authState.status) {
+    return <Navigate to="/home"></Navigate>;
+  }
   return (
     <div>
       <div>
@@ -43,10 +46,10 @@ export default function Details() {
                       <div className="row">
                         <div className="col-lg-7">
                           <hr />
-                          {data !== null &&
-                           data.products.map((item) => {
+                         {data !== null  &&
+                           data.map((item) => {
                               return (
-                                <div className="card my-3 mb-lg-0 no_border">
+                                <div className="card my-3 mb-lg-0 no_border" key={item._id}>
                                   <div className="card-body">
                                     <div className="d-md-flex justify-content-between">
                                       <div className="d-flex flex-row align-items-center">
@@ -95,7 +98,7 @@ export default function Details() {
                                   </div>
                                 </div>
                               );
-                            })}
+                            })} 
                         </div>
                         <div className="col-lg-5">
                           <div className="card bgF1F6F7  no_border">

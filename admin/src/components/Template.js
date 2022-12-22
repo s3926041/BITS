@@ -4,10 +4,10 @@ import Pagnition from "./Pagnition";
 import SelectForm from "./SelectForm";
 export default function Template({ url }) {
   const ascAlphabet = (a, b) => {
-    return a.title.localeCompare(b.title);
+    // return a.title.localeCompare(b.title);
   };
   const desAlphabet = (a, b) => {
-    return -a.title.localeCompare(b.title);
+    // return -a.title.localeCompare(b.title);
   };
   const desPrice = (a, b) => {
     if (a.price > b.price) {

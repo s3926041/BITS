@@ -11,11 +11,15 @@ router.post("/place", verifyToken, async (req, res) => {
     arr.push({
       productId: item,
       quantity: obj[item].quantity,
+      img: obj[item].img,
+      price: obj[item].price,
+      title : obj[item].title,
+      author: obj[item].author,
     });
     price += parseFloat(obj[item].price);
   });
   if (arr == [] || price == 0)
-    return res.status(500).json({ err: "NO OR DER RECEIVE" });
+    return res.status(500).json({ err: "NO ORDER RECEIVE" });
   const order = new Order({
     userId: req.user.id,
     products: arr,
@@ -35,6 +39,7 @@ router.get("/general", verifyToken, async (req, res) => {
 
 router.get("/details/:orderId", verifyToken, async (req, res) => {
   const order = await Order.findById(req.params.orderId);
+  console.log(order)
   res.status(200).json(order)
 });
 

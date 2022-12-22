@@ -6,6 +6,8 @@ import { styled } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SearchIcon from "@mui/icons-material/Search";
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 import { toast } from "react-toastify";
 
@@ -100,6 +102,7 @@ const recentPosts = [
 ];
 
 function Navi() {
+  const [searchType,setSearchType] = useState('Books')
   const StyledBadge = styled(Badge)(({ theme }) => ({
     "& .MuiBadge-badge": {
       right: -3,
@@ -129,7 +132,7 @@ function Navi() {
   const { userGlobal, cartGlobal } = useContext(AuthContext);
   const { cart, setCart } = cartGlobal;
   const { authState, setAuthState } = userGlobal;
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   let id = authState.id;
   const enter = (e) => {
     if (e.key === "Enter") {
@@ -138,6 +141,9 @@ function Navi() {
   };
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
+  }
+  const handleChangeSearch = (e) =>{
+    setSearchType(e.target.value)
   }
 
   return (
@@ -171,6 +177,16 @@ function Navi() {
                           aria-hidden="true"
                         />
                       </Popover.Button>
+
+                      <a className="text-gray-500 mx-2" href="/blogs">
+                        Blogs
+                      </a>
+                      <a className="text-gray-500 mx-2" href="/news">
+                        News
+                      </a>
+                      <a className="text-gray-500 mx-2" href="/game">
+                        Minigame
+                      </a>
 
                       <Transition
                         as={Fragment}
@@ -218,10 +234,25 @@ function Navi() {
                 onKeyDown={enter}
                 InputProps={{
                   endAdornment: (
-                    <SearchIcon
+                    <>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={searchType}
+                        label="Type"
+                        sx={{ boxShadow: 'none', '.MuiOutlinedInput-notchedOutline': { border: 0 } }}
+                        onChange={handleChangeSearch}
+          
+                      >
+                        <MenuItem value={'Books'}>Books</MenuItem>
+                        <MenuItem value={'Blogs'}>BLogs</MenuItem>
+                        <MenuItem value={'News'}>News</MenuItem>
+                      </Select>
+                      <SearchIcon
                       className="cursor-pointer"
                       onClick={handleSearch}
                     ></SearchIcon>
+                    </>
                   ),
                 }}
               />
@@ -245,48 +276,51 @@ function Navi() {
                   </StyledBadge>
                 </IconButton>
               </a>
-              {
-               !authState.status ? (
-                  <>
-                    <a
-                      onClick={()=>{
-                        navigate('/signin')
-                      }}
-                      className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900 ml-8"
-                    >
-                      Sign in
-                    </a>
-                    <a
-                      // href="/signup"
-                      onClick={()=>{
-                        navigate('/signup')
-                      }}
-                      className="ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
-                    >
-                      Sign up
-                    </a>
-                  </>
-                ) : (
-                  <>
+              {!authState.status ? (
+                <>
                   <a
-                      href="/user/profile"
-                      className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900 ml-8"
-                    >
-                      Account
-                    </a>
-                    <a
-                      onClick={()=>{
-                        setAuthState({ username:'',id:'', status: false })
-                        localStorage.removeItem('token')
-                        navigate('/home')
-                       
-                      }}
-                      className="ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
-                    >
-                      Logout
-                    </a></>
-                )
-            }
+                    onClick={() => {
+                      navigate("/signin");
+                    }}
+                    className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900 ml-8"
+                  >
+                    Sign in
+                  </a>
+                  <a
+                    // href="/signup"
+                    onClick={() => {
+                      navigate("/signup");
+                    }}
+                    className="ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                  >
+                    Sign up
+                  </a>
+                </>
+              ) : (
+                <>
+                  <a
+                    onClick={() => {
+                      // setAuthState(...authState)
+                      // console.log(1);
+                      navigate("/user/profile");
+                    }}
+                    // href="/user/profile"
+                    className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900 ml-8"
+                  >
+                    Account
+                  </a>
+                  <a
+                    onClick={() => {
+                      setAuthState({ username: "", id: "", status: false });
+                      localStorage.removeItem("token");
+                      navigate("/home");
+                    }}
+                    className="ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                  >
+                    Logout
+                  </a>
+                </>
+              )}
             </div>
           </div>
         </div>

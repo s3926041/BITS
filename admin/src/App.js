@@ -10,9 +10,13 @@ import DashBoard from "./components/DashBoard";
 import Order from "./components/Order";
 import Product from "./components/Product";
 import User from "./components/User";
-
+import Chat from "./components/Chat"
 const App = () => {
-  const [authState, setAuthState] = useState(false);
+  const [authState, setAuthState] = useState({
+    username: "",
+    id: '',
+    status: false,
+  });
   useEffect(() => {
     axios
       .get("http://localhost:5000/api/auth/admin", {
@@ -22,12 +26,16 @@ const App = () => {
       })
       .then((response) => {
         if (!response.data.error) {
-          setAuthState(true);
+          setAuthState({
+            username: response.data.username,
+            id: response.data.id,
+            status: true,
+          });
         }
       })
       .catch((err) => {
         console.log(err.message);
-        setAuthState(false)
+        setAuthState({ username:'',id:'', status: false })
       });
   }, []);
 
@@ -35,6 +43,8 @@ const App = () => {
     <AuthContext.Provider value={{ authState, setAuthState }}>
       <BrowserRouter>
       <div className="d-flex">
+      <Chat></Chat>
+   
       {authState && <Aside></Aside>}
       
         <Routes>
@@ -53,6 +63,7 @@ const App = () => {
           <Route path="/order" element={<Order />}></Route>
           <Route path="/product" element={<Product />}></Route>
           <Route path="/user" element={<User />}></Route>
+          <Route path="/chat" element={<Chat></Chat>}></Route>
         </Routes>
       </div>
         

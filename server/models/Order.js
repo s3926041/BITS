@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-var Float = require('mongoose-float').loadType(mongoose, 4);
+var Float = require("mongoose-float").loadType(mongoose, 4);
 
 const OrderSchema = new mongoose.Schema(
   {
@@ -13,10 +13,22 @@ const OrderSchema = new mongoose.Schema(
           type: Number,
           default: 1,
         },
+        price: {
+          type: Float,
+        },
+        img: {
+          type: String,
+        },
+        title:{
+          type:String,
+        },
+        author:{
+          type: String
+        }
       },
     ],
-    price: {type: Float},
-    address: { type: String, default:"ha noi" },
+    price: { type: Float },
+    address: { type: String, default: "ha noi" },
     status: { type: String, default: "pending" },
   },
   { timestamps: true }

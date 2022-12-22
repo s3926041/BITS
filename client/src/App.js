@@ -17,12 +17,18 @@ import Search from "./components/Search/Search";
 import Example from "./components/Book/Book";
 import Signin from "./components/Auth/Signin";
 import Signup from "./components/Auth/Signup";
+import News from "./components/News/News";
+import Footer from "./components/Footer/Footer";
+import Chat from "./components/ChatEngine/Chat"
+import Blog from "./components/Blog/Blog";
+import ChatAll from "./components/ChatEngine/ChatAll";
+import './index.css'
 const App = () => {
   const [cart, setCart] = useState(0);
   const [page, setPage] = useState("Home");
   const [authState, setAuthState] = useState({
     username: "",
-    id: 0,
+    id: '',
     status: false,
   });
   useEffect(() => {
@@ -72,8 +78,8 @@ const App = () => {
     >
       <BrowserRouter>
         <Navi />
-        <Banner />
-        <Routes>
+        {/* <ChatEngine></ChatEngine> */}
+                <Routes>
           <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/home" element={<Home />}></Route>
           <Route path="/books" element={<Example />}></Route>
@@ -83,11 +89,15 @@ const App = () => {
           <Route path="/search/:search" element={<Search />}></Route>
           <Route path="/cart" element={<Cart></Cart>}></Route>
           <Route path="/user/profile" element={<Profile></Profile>}></Route>
+          <Route path="/news" element={<News></News>}></Route>
           <Route
             path="/user/order/details/:orderId"
             element={<Details></Details>}
           ></Route>
+          <Route path="/chat" element={<ChatAll></ChatAll>}></Route>
+          <Route path="/blogs" element={<Blog/>}></Route>
         </Routes>
+        <Footer/>
         <ToastContainer
           position="top-left"
           autoClose={5000}
@@ -100,6 +110,7 @@ const App = () => {
           pauseOnHover
           theme="light"
         />
+        <Chat></Chat>
       </BrowserRouter>
       {/* <ScrollToTop smooth top={100} /> */}
     </AuthContext.Provider>
