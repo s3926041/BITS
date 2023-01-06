@@ -80,7 +80,7 @@ export default function ({ defaultVal }) {
             />
           </div>
           <div className="d-grid gap-2 mt-3">
-            <button type="submit" className="btn btn-primary">
+          <button type="submit" className="bg-indigo-600 btn text-white">
               Submit
             </button>
           </div>

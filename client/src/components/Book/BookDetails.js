@@ -1,60 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { StarIcon } from "@heroicons/react/20/solid";
-import { RadioGroup } from "@headlessui/react";
-
+import Comment from "../Comment.js/Comment";
+import { AuthContext } from "../../helpers/AuthContext";
+import { useContext } from "react";
+import { toast } from "react-toastify";
 const product = {
-  name: "Basic Tee 6-Pack",
-  price: "$192",
-  href: "#",
-  breadcrumbs: [
-    { id: 1, name: "Men", href: "#" },
-    { id: 2, name: "Clothing", href: "#" },
-  ],
-  images: [
-    {
-      src: "https://tailwindui.com/img/ecommerce-images/product-page-02-secondary-product-shot.jpg",
-      alt: "Two each of gray, white, and black shirts laying flat.",
-    },
-    {
-      src: "https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-01.jpg",
-      alt: "Model wearing plain black basic tee.",
-    },
-    {
-      src: "https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-02.jpg",
-      alt: "Model wearing plain gray basic tee.",
-    },
-    {
-      src: "https://tailwindui.com/img/ecommerce-images/product-page-02-featured-product-shot.jpg",
-      alt: "Model wearing plain white basic tee.",
-    },
-  ],
-  colors: [
-    { name: "White", class: "bg-white", selectedClass: "ring-gray-400" },
-    { name: "Gray", class: "bg-gray-200", selectedClass: "ring-gray-400" },
-    { name: "Black", class: "bg-gray-900", selectedClass: "ring-gray-900" },
-  ],
-  sizes: [
-    { name: "XXS", inStock: false },
-    { name: "XS", inStock: true },
-    { name: "S", inStock: true },
-    { name: "M", inStock: true },
-    { name: "L", inStock: true },
-    { name: "XL", inStock: true },
-    { name: "2XL", inStock: true },
-    { name: "3XL", inStock: true },
-  ],
-  description:
-    'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
-  highlights: [
-    "Hand cut and sewn locally",
-    "Dyed with our proprietary colors",
-    "Pre-washed & pre-shrunk",
-    "Ultra-soft 100% cotton",
-  ],
-  details:
-    'The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming "Charcoal Gray" limited release.',
+  highlights: ["", "", "", ""],
 };
 
 const ReadMore = ({ children }) => {
@@ -78,7 +30,8 @@ function classNames(...classes) {
 }
 
 export default function BookDetails() {
-
+  const { cartGlobal } = useContext(AuthContext);
+  const { cart, setCart } = cartGlobal;
   let { id } = useParams();
   let apiLink = `http://localhost:5000/api/product/find/${id}`;
   const [data, setData] = useState({});
@@ -92,6 +45,17 @@ export default function BookDetails() {
     fetchData();
   }, []);
   // return <div>{JSON.stringify(data)}</div>;
+  const notify = () =>
+    toast.success("🦄 Added to cart!", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
   return (
     <div className="bg-white">
       <div className="pt-6 ">
@@ -101,7 +65,10 @@ export default function BookDetails() {
             <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
               {data.title}
             </h1>
-            <h3 className="text-lg my-4 font-bold tracking-tight text-gray-900 sm:text-xl"> {data.author} </h3>
+            <h3 className="text-lg my-4 font-bold tracking-tight text-gray-900 sm:text-xl">
+              {" "}
+              {data.author}{" "}
+            </h3>
           </div>
 
           {/* Options */}
@@ -116,6 +83,27 @@ export default function BookDetails() {
             </p>
 
             <button
+              onClick={() => {
+                if (localStorage.getItem("group100_cart") === null) {
+                  localStorage.setItem("group100_cart", JSON.stringify({}));
+                }
+                let arr = JSON.parse(localStorage.getItem("group100_cart"));
+                let id = data._id;
+                if (id in arr) {
+                  arr[id].quantity += 1;
+                } else {
+                  arr[id] = {
+                    quantity: 1,
+                    img: data.img,
+                    title: data.title,
+                    price: data.price,
+                    author: data.author,
+                  };
+                }
+                setCart(cart + 1);
+                localStorage.setItem("group100_cart", JSON.stringify(arr));
+                notify();
+              }}
               type="submit"
               className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-8 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
@@ -126,7 +114,6 @@ export default function BookDetails() {
           <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pt-6 lg:pb-16 lg:pr-8">
             {/* Description and details */}
             <div>
-  
               <div className="space-y-6">
                 <h2 className="">Description</h2>
                 <p className="text-base text-gray-900">
@@ -153,12 +140,20 @@ export default function BookDetails() {
               <h2 className="text-sm font-medium text-gray-900">Details</h2>
 
               <div className="mt-4 space-y-6">
-                <p className="text-sm text-gray-600">Curabitur vitae orci quis velit maximus iaculis nec id orci. Duis id sapien a urna bibendum rhoncus. Sed aliquet dictum efficitur. Quisque sed tincidunt leo, at placerat libero. Praesent ullamcorper suscipit urna at lobortis. Sed vel vulputate lacus. Morbi non sagittis quam, eu bibendum ligula. Aenean ultrices fermentum augue aliquam posuere.</p>
+                <p className="text-sm text-gray-600">
+                  Curabitur vitae orci quis velit maximus iaculis nec id orci.
+                  Duis id sapien a urna bibendum rhoncus. Sed aliquet dictum
+                  efficitur. Quisque sed tincidunt leo, at placerat libero.
+                  Praesent ullamcorper suscipit urna at lobortis. Sed vel
+                  vulputate lacus. Morbi non sagittis quam, eu bibendum ligula.
+                  Aenean ultrices fermentum augue aliquam posuere.
+                </p>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <Comment id={id}></Comment>
     </div>
   );
 }

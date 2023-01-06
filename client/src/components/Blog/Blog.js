@@ -118,9 +118,6 @@ function Blog() {
     fetchBlog();
   }, [modalShow]);
 
-  const create = () => {
-    console.log(userGlobal);
-  };
   const monthNames = [
     "January",
     "February",
@@ -153,26 +150,27 @@ function Blog() {
       <div className="w-full">
         {allBlog.map((item) => {
           return (
-            <div className=" my-10 border-b flex align-items-center">
-              <div className="date mb-5">
+            <div className=" my-10 border-b border-t flex align-items-center py-10">
+              <div className="date">
                 {" "}
                 <div className="date text-indigo-600 font-bold text-xl text-center mx-5 mt-2">
                   {new Date(item.createdAt).getDate()} <br />
-                  {monthNames[new Date(item.createdAt).getMonth()]}
+                  {monthNames[new Date(item.createdAt).getMonth()]} <br></br>
+                  {new Date(item.createdAt).getFullYear()}
                 </div>
               </div>
-              <div className="wrapper mb-5">
+              <div className="wrapper">
                 {" "}
                 <a href={`/blogdetails/${item._id}`}>
                   {" "}
-                  <div className="font-bold text-[25px] lg:text-[35px] m-0 p-0">
+                  <div className="font-bold text-[20px] lg:text-[25px] m-0 p-0">
                     {item.title}
                   </div>
                 </a>
-                <div className="text-[15px] lg:text-[20px]">
+                <div className="text-[12px] lg:text-[15px]">
                   by {item.author}
                 </div>
-                <div className="text-[20px] lg:text-[25px]">{item.content}</div>
+                <div className="text-[18px] lg:text-[20px]">{`${item.content.substring(0,250)}`}  <a href={`/blogdetails/${item._id}`}>readmore</a></div>
               </div>
             </div>
           );

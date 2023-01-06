@@ -10,6 +10,7 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    gold:{type:Number,default:0},
     // img: { type: String },
     address: {type: String}
   },

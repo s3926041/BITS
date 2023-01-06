@@ -1,12 +1,14 @@
 const jwt = require("jsonwebtoken");
-const dotenv = require('dotenv')
+const dotenv = require('dotenv');
+const User = require("../models/User");
 
-const verifyToken = (req, res, next) => {
+const verifyToken =  (req, res, next) => {
   const token = req.headers.token;
   if (token) {
-    jwt.verify(token, process.env.TOKEN_SC, (err, user) => {
+    jwt.verify(token, process.env.TOKEN_SC, async(err, user) => {
       if (err) return res.status(403).json(err);
-      req.user = user;
+      const newUser = await User.findById(user.id)
+      req.user = newUser;
       next();
     });
   }
@@ -32,6 +34,6 @@ const verifyTokenAndAdmin = (req, res, next) => {
 
 module.exports = {
   verifyToken,
-  verifyTokenAndAuthorization,
+  verifyTokenAndAuthorization, 
   verifyTokenAndAdmin,
 };

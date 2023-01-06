@@ -64,7 +64,7 @@ label {
   /* height:calc(372px); */
 }
 .price {
-  color:#2375F3
+  
 }
 .sort{
   width: 150px;
@@ -113,6 +113,5 @@ label {
 }
 
 fieldset{
-
   outline: none !important;
 }

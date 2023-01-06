@@ -19,8 +19,8 @@ export default function () {
         .post(url, data)
         .then((res) => {
           sessionStorage.setItem("token", res.data.token);
-          setAuthState(true);
-          navigate("/dashboard");
+          // navigate("/dashboard");
+          window.location.href = '/dashboard';
         })
         .catch((err) => {
           console.log(err.response);
@@ -29,40 +29,42 @@ export default function () {
     apiCall(url, data);
   };
 
-  if (authState) {
-    navigate('/dashboard')
+  if (authState.status) {
+    navigate("/dashboard");
   }
 
+  return (
+    <div className="Auth-form-container">
+      <form className="Auth-form" onSubmit={handleSubmit}>
+        <div className="Auth-form-content">
+          <h3 className="Auth-form-title">Sign In</h3>
 
-    return (
-      <div className="Auth-form-container">
-        <form className="Auth-form" onSubmit={handleSubmit}>
-          <div className="Auth-form-content">
-            <h3 className="Auth-form-title">Sign In</h3>
-
-            <div className="form-group mt-3">
-              <label>Username</label>
-              <input
-                type="text"
-                className="form-control mt-1"
-                placeholder="Username"
-              />
-            </div>
-            <div className="form-group mt-3">
-              <label>Password</label>
-              <input
-                type="password"
-                className="form-control mt-1"
-                placeholder="Enter password"
-              />
-            </div>
-            <div className="d-grid gap-2 mt-3">
+          <div className="form-group mt-3">
+            <label>Username</label>
+            <input
+              type="text"
+              className="form-control mt-1"
+              placeholder="Username"
+            />
+          </div>
+          <div className="form-group mt-3">
+            <label>Password</label>
+            <input
+              type="password"
+              className="form-control mt-1"
+              placeholder="Enter password"
+            />
+          </div>
+          <div className="d-grid gap-2 mt-3">
+            <a href="/dashboard">
+              {" "}
               <button type="submit" className="btn btn-primary">
                 Submit
               </button>
-            </div>
+            </a>
           </div>
-        </form>
-      </div>
-    );
-  }
+        </div>
+      </form>
+    </div>
+  );
+}

@@ -1,10 +1,11 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useNavigate ,Navigate} from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../helpers/AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { TextField } from "@mui/material";
 
 export default function Details() {
   const { userGlobal } = useContext(AuthContext);
@@ -20,8 +21,8 @@ export default function Details() {
         },
       })
       .then((res) => {
-        setData(res.data.products);
-        console.log(res.data.products)
+        setData(res.data);
+        console.log(res.data.products);
       })
       .catch((err) => {
         console.log(err);
@@ -46,10 +47,13 @@ export default function Details() {
                       <div className="row">
                         <div className="col-lg-7">
                           <hr />
-                         {data !== null  &&
-                           data.map((item) => {
+                          {data.products !== null &&
+                            data.products?.map((item) => {
                               return (
-                                <div className="card my-3 mb-lg-0 no_border" key={item._id}>
+                                <div
+                                  className="card my-3 mb-lg-0 no_border"
+                                  key={item._id}
+                                >
                                   <div className="card-body">
                                     <div className="d-md-flex justify-content-between">
                                       <div className="d-flex flex-row align-items-center">
@@ -87,18 +91,12 @@ export default function Details() {
                                             {item.price}$
                                           </h5>
                                         </div>
-                                        <a
-                                          href="#!"
-                                          style={{ color: "#cecece" }}
-                                        >
-                                          <i className="fas fa-trash-alt" />
-                                        </a>
                                       </div>
                                     </div>
                                   </div>
                                 </div>
                               );
-                            })} 
+                            })}
                         </div>
                         <div className="col-lg-5">
                           <div className="card bgF1F6F7  no_border">
@@ -107,61 +105,49 @@ export default function Details() {
                                 <h5 className="mb-0">Billing Details</h5>
                               </div>
 
-                              <form className="mt-4">
-                                <div className="form-outline form-white mb-4">
-                                  <input
-                                    type="text"
-                                    id="typeName"
-                                    className="form-control form-control-lg no_border"
-                                    size={17}
-                                    placeholder="Full Name"
-                                  />
-
-                                  <div className="form-notch">
-                                    <div
-                                      className="form-notch-leading"
-                                      style={{ width: "9px" }}
-                                    />
-                                    <div
-                                      className="form-notch-middle"
-                                      style={{ width: "117.6px" }}
-                                    />
-                                    <div className="form-notch-trailing" />
-                                  </div>
-                                </div>
-                                <div className="form-outline form-white mb-4">
-                                  <input
-                                    type="text"
-                                    id="1"
-                                    className="form-control form-control-lg no_border"
-                                    size={17}
-                                    placeholder="Address"
-                                  />
-                                  <div className="form-notch">
-                                    <div
-                                      className="form-notch-leading"
-                                      style={{ width: "9px" }}
-                                    />
-                                    <div
-                                      className="form-notch-middle"
-                                      style={{ width: "84.8px" }}
-                                    />
-                                    <div className="form-notch-trailing" />
-                                  </div>
-                                </div>
+                              <form className="mt-4 flex flex-col">
+                                <TextField
+                                  label="Full Name"
+                                  type="text"
+                                  className="m-3"
+                                  defaultValue={1}
+                                  disabled
+                                />
+                                <TextField
+                                  label="Address"
+                                  type="text"
+                                  className="m-3"
+                                  disabled
+                                />
+                                <TextField
+                                  label="Phone number"
+                                  type="text"
+                                  className="m-3"
+                                  disabled
+                                />
+                                <TextField
+                                  label="Email"
+                                  type="text"
+                                  className="m-3"
+                                  disabled
+                                />
                               </form>
                               <hr className="my-4" />
                               <div className="d-flex justify-content-between">
                                 <p className="mb-2">Subtotal</p>
-                                {/* <p className="mb-2">${price}</p> */}
+                                <p className="mb-2">${data.price}</p>
                               </div>
                               <div className="d-flex justify-content-between">
                                 <p className="mb-2">Shipping</p>
                                 <p className="mb-2">$20.00</p>
                               </div>
+                              <div className="d-flex justify-content-between">
+                                <p className="mb-2">Gold Applied</p>
+                                <p className="mb-2">{data.gold ? data.gold : 0}</p>
+                              </div>
                               <div className="d-flex justify-content-between mb-4">
                                 <p className="mb-2">Total</p>
-                                {/* <p className="mb-2">${price + 20}</p> */}
+                                <p className="mb-2">${data.price + 20}</p>
                               </div>
                             </div>
                           </div>

@@ -9,6 +9,7 @@ import { AuthContext } from "./helpers/AuthContext";
 import axios from "axios";
 import Profile from "./components/User/Profile";
 import Details from "./components/User/Details";
+import BlogDetails from "./components/Blog/BlogDetails";
 import Banner from "./components/Banner/Banner";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -17,19 +18,22 @@ import Search from "./components/Search/Search";
 import Example from "./components/Book/Book";
 import Signin from "./components/Auth/Signin";
 import Signup from "./components/Auth/Signup";
-import News from "./components/News/News";
 import Footer from "./components/Footer/Footer";
-import Chat from "./components/ChatEngine/Chat"
+import Chat from "./components/ChatEngine/Chat";
 import Blog from "./components/Blog/Blog";
-import ChatAll from "./components/ChatEngine/ChatAll";
-import './index.css'
+import Sicbo from "./components/Minigame/Sicbo";
+// import BlogDetails from "./components/Blog/BlogDetails"
+// import ChatAll from "./components/ChatEngine/ChatAll";
+import "./index.css";
+// import Dino from "./components/Minigame/Dino";
 const App = () => {
   const [cart, setCart] = useState(0);
   const [page, setPage] = useState("Home");
   const [authState, setAuthState] = useState({
     username: "",
-    id: '',
+    id: "",
     status: false,
+    gold: 0,
   });
   useEffect(() => {
     let quantity = 0;
@@ -53,20 +57,25 @@ const App = () => {
       })
       .then((response) => {
         if (response.data.error) {
-          setAuthState({ ...authState, status: false });
+          setAuthState({
+            username: "",
+            id: "",
+            status: false,
+            gold: 0,
+          });
         } else {
           setAuthState({
             username: response.data.username,
-            id: response.data.id,
+            id: response.data._id,
             status: true,
+            gold: response.data.gold 
           });
-          console.log("LOGGED IN AS " + response.data.username);
         }
       })
       .catch((err) => {
-        setAuthState({ username:'',id:'', status: false })
+        setAuthState({ username: "", id: "", status: false, gold: 0 });
       });
-  }, []);
+  }, [authState.status]);
 
   return (
     <AuthContext.Provider
@@ -79,7 +88,7 @@ const App = () => {
       <BrowserRouter>
         <Navi />
         {/* <ChatEngine></ChatEngine> */}
-                <Routes>
+        <Routes>
           <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/home" element={<Home />}></Route>
           <Route path="/books" element={<Example />}></Route>
@@ -89,15 +98,16 @@ const App = () => {
           <Route path="/search/:search" element={<Search />}></Route>
           <Route path="/cart" element={<Cart></Cart>}></Route>
           <Route path="/user/profile" element={<Profile></Profile>}></Route>
-          <Route path="/news" element={<News></News>}></Route>
+          {/* <Route path="/news" element={<News></News>}></Route> */}
           <Route
             path="/user/order/details/:orderId"
             element={<Details></Details>}
           ></Route>
-          <Route path="/chat" element={<ChatAll></ChatAll>}></Route>
-          <Route path="/blogs" element={<Blog/>}></Route>
+          <Route path="/blogs" element={<Blog />}></Route>
+          <Route path="/blogdetails/:id" element={<BlogDetails />}></Route>
+          <Route path="/game" element={<Sicbo />}></Route >
         </Routes>
-        <Footer/>
+        <Footer />
         <ToastContainer
           position="top-left"
           autoClose={5000}

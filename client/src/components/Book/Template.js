@@ -104,7 +104,7 @@ export default function Template({ url }) {
                 </h3>
                 <div className="flex justify-between items-center pt-2">
                   <p className="mt-1 text-lg font-medium text-gray-900">
-                    {item.price}
+                    ${item.price}
                   </p>
                   <button
                    onClick={() => {

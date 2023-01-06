@@ -16,18 +16,22 @@ const OrderSchema = new mongoose.Schema(
         price: {
           type: Float,
         },
+
         img: {
           type: String,
         },
-        title:{
-          type:String,
+        title: {
+          type: String,
         },
-        author:{
-          type: String
-        }
+        author: {
+          type: String,
+        },
       },
     ],
     price: { type: Float },
+    price_after: {
+      type: Float,
+    },
     address: { type: String, default: "ha noi" },
     status: { type: String, default: "pending" },
   },

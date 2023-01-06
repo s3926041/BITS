@@ -1,13 +1,14 @@
 const router = require("express").Router();
 const Conversation = require("../models/Conversation");
+const { verifyToken, verifyTokenAndAdmin } = require("./middleWare");
 
 //new conv
+router.get("/",verifyToken, async (req, res) => {
 
-router.post("/", async (req, res) => {
+    // return res.status(500).json('Existed conversation')
   const newConversation = new Conversation({
-    members: [req.body.senderId, req.body.receiverId],
+    members: req.user.id,
   });
-
   try {
     const savedConversation = await newConversation.save();
     res.status(200).json(savedConversation);
@@ -20,26 +21,28 @@ router.post("/", async (req, res) => {
 
 router.get("/:userId", async (req, res) => {
   try {
-    const conversation = await Conversation.find({
-      members: { $in: [req.params.userId] },
+    const conversation = await Conversation.findOne({
+      members: req.params.userId ,
     });
+    res.status(200).json(conversation);
+  } catch (err) {
+    res.status(500).json(err);
+    console.log('sdad')
+  }
+});
+router.post("/",verifyTokenAndAdmin, async (req, res) => {
+  try {
+    const conversation = await Conversation.find()
+    console.log(conversation)
     res.status(200).json(conversation);
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
+
 // get conv includes two userId
 
-router.get("/find/:firstUserId/:secondUserId", async (req, res) => {
-  try {
-    const conversation = await Conversation.findOne({
-      members: { $all: [req.params.firstUserId, req.params.secondUserId] },
-    });
-    res.status(200).json(conversation)
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
+
 
 module.exports = router;

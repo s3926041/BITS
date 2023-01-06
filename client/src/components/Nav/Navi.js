@@ -6,11 +6,7 @@ import { styled } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SearchIcon from "@mui/icons-material/Search";
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-
 import { toast } from "react-toastify";
-
 import { Fragment } from "react";
 import { Popover, Transition } from "@headlessui/react";
 import {
@@ -102,7 +98,7 @@ const recentPosts = [
 ];
 
 function Navi() {
-  const [searchType,setSearchType] = useState('Books')
+  const [searchType, setSearchType] = useState("book");
   const StyledBadge = styled(Badge)(({ theme }) => ({
     "& .MuiBadge-badge": {
       right: -3,
@@ -133,7 +129,6 @@ function Navi() {
   const { cart, setCart } = cartGlobal;
   const { authState, setAuthState } = userGlobal;
   const navigate = useNavigate();
-  let id = authState.id;
   const enter = (e) => {
     if (e.key === "Enter") {
       handleSearch();
@@ -142,9 +137,9 @@ function Navi() {
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
-  const handleChangeSearch = (e) =>{
-    setSearchType(e.target.value)
-  }
+  const handleChangeSearch = (e) => {
+    setSearchType(e.target.value);
+  };
 
   return (
     <div className="w-full z-[999]">
@@ -181,11 +176,9 @@ function Navi() {
                       <a className="text-gray-500 mx-2" href="/blogs">
                         Blogs
                       </a>
-                      <a className="text-gray-500 mx-2" href="/news">
-                        News
-                      </a>
+
                       <a className="text-gray-500 mx-2" href="/game">
-                        Minigame
+                        Game
                       </a>
 
                       <Transition
@@ -235,23 +228,24 @@ function Navi() {
                 InputProps={{
                   endAdornment: (
                     <>
-                      <Select
+                      {/* <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
                         value={searchType}
                         label="Type"
-                        sx={{ boxShadow: 'none', '.MuiOutlinedInput-notchedOutline': { border: 0 } }}
+                        sx={{
+                          boxShadow: "none",
+                          ".MuiOutlinedInput-notchedOutline": { border: 0 },
+                        }}
                         onChange={handleChangeSearch}
-          
                       >
-                        <MenuItem value={'Books'}>Books</MenuItem>
-                        <MenuItem value={'Blogs'}>BLogs</MenuItem>
-                        <MenuItem value={'News'}>News</MenuItem>
-                      </Select>
+                        <MenuItem value={"book"}>Books</MenuItem>
+                        <MenuItem value={"blog"}>BLogs</MenuItem>
+                      </Select> */}
                       <SearchIcon
-                      className="cursor-pointer"
-                      onClick={handleSearch}
-                    ></SearchIcon>
+                        className="cursor-pointer"
+                        onClick={handleSearch}
+                      ></SearchIcon>
                     </>
                   ),
                 }}
@@ -309,6 +303,22 @@ function Navi() {
                   >
                     Account
                   </a>
+                  {authState.status && (
+                    <div
+                      className="whitespace-nowrap text-base font-medium text-gray-500 ml-8 flex cursor-"
+                      onClick={() => {
+                        navigate("/game");
+                      }}
+                    >
+                      <span>{authState?.gold}</span>
+                      <img
+                        className="w-[25px] mx-2"
+                        src="https://cdn-icons-png.flaticon.com/512/1490/1490853.png"
+                        alt=""
+                      />
+                    </div>
+                  )}
+
                   <a
                     onClick={() => {
                       setAuthState({ username: "", id: "", status: false });

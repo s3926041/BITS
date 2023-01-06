@@ -61,7 +61,7 @@ export default function () {
             />
           </div>
           <div className="d-grid gap-2 mt-3">
-            <button type="submit" className="btn btn-primary no_border">
+            <button type="submit" className="bg-indigo-600 btn text-white hover:opacity-1">
               Submit
             </button>
           </div>

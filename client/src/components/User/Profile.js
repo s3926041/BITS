@@ -27,7 +27,7 @@ function Profile() {
   }
   return (
     <div className="flex flex-col lg:flex-row">
-      <div className="overflow-hispanen bg-white shadow  w-[full] lg:w-[500px]">
+      <div className="overflow-hispanen bg-white border-r-2  w-[full] lg:w-[500px]">
         <div className="px-4 py-5 sm:px-6">
           <h3 className="text-lg font-medium leading-6 text-gray-900">
             Username's Profile
@@ -69,8 +69,16 @@ function Profile() {
                 </span>
 
        
-              <EditIcon className=""></EditIcon>
+              <EditIcon className="opacity-0"></EditIcon>
             </div>
+            <div className="bg-gray-50 px-4 py-5  sm:px-6 flex justify-between items-center">
+   
+   <span className="text-sm font-medium text-gray-500">Gold</span>
+   <span className=" text-sm text-gray-900 sm:col-span-2 sm:mt-0">{authState.gold}</span>
+
+
+ <EditIcon className="opacity-0"></EditIcon>
+</div>
           </dl>
         </div>
       </div>
@@ -116,7 +124,7 @@ function Profile() {
                   {data.map((item) => {
                     return (
                       <tr
-                        className="cursor-pointer hover:translate-x-6 hover:font-bold "
+                        className="cursor-pointer  hover:font-bold "
                         key={item._id}
                         onClick={() => {
                           navigate(`/user/order/details/${item._id}`);

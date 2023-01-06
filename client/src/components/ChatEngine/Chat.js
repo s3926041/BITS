@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
@@ -9,63 +9,101 @@ import SendIcon from "@mui/icons-material/Send";
 import LogoutIcon from "@mui/icons-material/Logout";
 import axios from "axios";
 import { AuthContext } from "../../helpers/AuthContext";
-const socket = io.connect("http://localhost:8900", {
-  withCredentials: true,
-});
+import { format } from "timeago.js";
+
 function Chat() {
   const { userGlobal } = useContext(AuthContext);
   const { authState, setAuthState } = userGlobal;
   const [curMessage, setCurMessage] = useState("");
-  const [email, setEmail] = useState("");
+  const [messages, setMessages] = useState([]);
+
+  const [currentChat, setCurrentChat] = useState(null);
   const [open, setOpen] = useState(false);
   const [joined, setJoined] = useState(false);
-  const [arrMessage, setArMessage] = useState([]);
+  const [arrivalMessage, setArrivalMessage] = useState(null);
+  const scrollRef = useRef();
+  const socket = useRef();
+  useEffect(() => {
+    socket.current = io("ws://localhost:8900");
+    socket.current.on("getMessage", (data) => {
+      setArrivalMessage({
+        sender: data.senderId,
+        text: data.text,
+        createdAt: Date.now(),
+      });
+    });
+  }, []);
+  useEffect(() => {
+    arrivalMessage &&
+      currentChat?.members != "638f10bc77e108e5da95aaf2" &&
+      setMessages((prev) => [...prev, arrivalMessage]);
+  }, [arrivalMessage, currentChat]);
+
+  useEffect(() => {}, [authState]);
+
+  useEffect(() => {
+    const getConversations = async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:5000/api/conversations/" + authState.id
+        );
+        setCurrentChat(res.data);
+
+      } catch (err) {
+      }
+    };
+    getConversations();
+  }, [authState.id]);
+
   const sendMessage = async () => {
     if (curMessage !== "") {
-      const messageData = {
-        userid:authState.id,
-        message: curMessage,
-        time:
-          new Date(Date.now()).getHours() +
-          ":" +
-          new Date(Date.now()).getMinutes(),
+      const message = {
+        sender: authState.id,
+        text: curMessage,
+        conversationId: currentChat._id,
       };
-      await socket.emit("sendMessage", messageData);
-      setArMessage((list) => [...list, messageData]);
+      socket.current.emit("sendMessage", {
+        senderId: authState.id,
+        receiverId: "",
+        text: curMessage,
+      });
+
+      try {
+        const res = await axios.post(
+          "http://localhost:5000/api/messages",
+          message
+        );
+        setMessages([...messages, res.data]);
+        setCurMessage("");
+      } catch (err) {
+        console.log(err);
+      }
     }
-  };
-  const handleEmail = (e) => {
-    console.log(e.target.value);
-    setEmail(e.target.value);
   };
 
   const toggle = () => {
     setOpen(!open);
   };
   const joinChat = async () => {
-    const res = await axios
-      .get("http://localhost:5000/api/chat/create", {
+    await axios
+      .get("http://localhost:5000/api/conversations/", {
         headers: {
           token: localStorage.getItem("token"),
         },
-      })
-      .catch((err) => console.log(err.message));
-    socket.emit("join_chat", authState.id);
-    console.log(email);
+      }).catch(err=>{})
+    await axios
+      .get("http://localhost:5000/api/messages/" + currentChat?._id)
+      .then((res) => setMessages(res.data));
+    socket.current.emit("addUser", authState.id);
     setJoined(true);
   };
-  useEffect(()=>{
-
-  })
 
   useEffect(() => {
-    socket.on("receive_message", (data) => {
-      setArMessage((list) => [...list, data]);
-    });
-  }, [socket]);
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+console.log(joined)
   const out = () => {
     setJoined(false);
-    setEmail("");
   };
   return (
     <>
@@ -120,33 +158,70 @@ function Chat() {
                 value="Join"
               />
             )}
-
-            {/* {email.length == 0 ? (
-              <span className="text-center font-bold text-lg text-[white] mt-4 h-[100px]">
-                {" "}
-                Enter your email <br /> to get started
-              </span>
-            ) : (
-              <div className="h-[100px] mt-4">
-                {" "}
-                <input
-                  type="submit"
-                  value="Continue"
-                  className="rounded-lg border-2 h-10 bg-white   w-[205.6px]  font-bold text-lg"
-                  onClick={handleContinue}
-                ></input>
-              </div>
-            )} */}
+            {!authState.status && (
+              <a
+                href="/signin"
+                className="rounded-lg border-2 h-10 bg-white  w-[205.6px] flex align-items-center justify-center  font-bold text-lg"
+              >
+                Login
+              </a>
+            )}
           </div>
           <div className={`${joined ? "block" : "hidden"}`}>
             <div className="header h-[50px] flex justify-center align-items-center">
               {" "}
               <h3 className=" text-lg text-[white]">Live Support</h3>
             </div>
-            <div className="bg-white w-full h-[350px] rounded-b-lg flex flex-col justify-between">
-              <div className="body h-[300px] overflow-scroll p-2">
-                {arrMessage.map((message) => {
-                  return <h1>{message.message}</h1>;
+            <div
+              className={`bg-white w-full h-[350px] rounded-b-lg flex flex-col`}
+            >
+              <div className="body h-[300px] overflow-x-hidden p-2">
+                {messages.map((message) => {
+                  return (
+                    <div
+                      ref={scrollRef}
+                      className={`w-full  my-2 flex flex-col ${
+                        message.sender == authState.id
+                          ? "align-items-end"
+                          : "align-items-start"
+                      } `}
+                    >
+                      {" "}
+                      <div
+                        className={`wrap rounded p-2 min-w-[100px] max-w-[200px] ${
+                          message.sender == authState.id
+                            ? "bg-indigo-600"
+                            : "bg-gray-200"
+                        } `}
+                      >
+                        <span
+                          className={`flex ${
+                            message.sender == authState.id
+                              ? "text-white justify-end"
+                              : "text-black"
+                          }`}
+                        >
+                          {message.text}
+                        </span>
+                      </div>
+                      <div
+                        className={`flex w-full ${
+                          message.sender == authState.id
+                            ? "justify-end"
+                            : "justify-start"
+                        }`}
+                      >
+                        <span className="text-[13px]">
+                          {/* {`${new Date(
+                            message.createdAt
+                          ).getHours()}:${new Date(
+                            message.createdAt
+                          ).getMinutes()}`}{" "} */}
+                    {      format(message.createdAt)}
+                        </span>
+                      </div>
+                    </div>
+                  );
                 })}
               </div>
               <div className="end h-[50px] flex justify-center align-items-center mx-2 border-t-2">
@@ -156,6 +231,7 @@ function Chat() {
                   name=""
                   id=""
                   placeholder="Ask something"
+                  value={curMessage}
                   onChange={(event) => {
                     setCurMessage(event.target.value);
                     // console.log(curMessage)

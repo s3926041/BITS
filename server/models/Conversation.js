@@ -2,11 +2,10 @@ const mongoose = require("mongoose");
 
 const ConversationSchema = new mongoose.Schema(
   {
-    members: {
-      type: Array,
-    },
+    members: { type: String, required: true, unique: true },
   },
   { timestamps: true }
 );
-
-module.exports = mongoose.model("Conversation", ConversationSchema);
+const Conversation = mongoose.model("Conversation", ConversationSchema);
+Conversation.createIndexes()
+module.exports = Conversation 
